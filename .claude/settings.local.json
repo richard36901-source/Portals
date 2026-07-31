@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Read(//Users/shalevdrix/.nvm/versions/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(brew list *)",
+      "Bash(brew --version)",
+      "Bash(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh)",
+      "Bash(bash)",
+      "mcp__5da1815f-2808-4677-a536-fbf5dbb751d8__create_column",
+      "mcp__5da1815f-2808-4677-a536-fbf5dbb751d8__create_item",
+      "mcp__5da1815f-2808-4677-a536-fbf5dbb751d8__change_item_column_values",
+      "mcp__5da1815f-2808-4677-a536-fbf5dbb751d8__create_items",
+      "Bash(python3 -)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/welcome)",
+      "mcp__49fc3765-e770-42a0-ae5b-6f0204429e82__list_projects",
+      "mcp__49fc3765-e770-42a0-ae5b-6f0204429e82__list_tables",
+      "mcp__49fc3765-e770-42a0-ae5b-6f0204429e82__execute_sql",
+      "mcp__49fc3765-e770-42a0-ae5b-6f0204429e82__apply_migration",
+      "Bash(gh auth *)"
+    ]
+  }
+}
