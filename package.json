@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "pages:build": "npx @cloudflare/next-on-pages"
+    "start": "next start"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.111.0",

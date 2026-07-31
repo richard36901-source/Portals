@@ -25,7 +25,8 @@
       "Bash(git fetch *)",
       "Bash(git rebase *)",
       "Bash(git add *)",
-      "Bash(git commit -m 'Update local permission settings *)"
+      "Bash(git commit -m 'Update local permission settings *)",
+      "Bash(git commit -m 'Static export for Cloudflare Pages: output=export, client-side redirects *)"
     ]
   }
 }

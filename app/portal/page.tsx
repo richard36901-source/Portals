@@ -1,5 +1,12 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function PortalIndex() {
-  redirect("/portal/dashboard");
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/portal/dashboard");
+  }, [router]);
+  return null;
 }
