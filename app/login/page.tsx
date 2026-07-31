@@ -57,6 +57,8 @@ export default function LoginPage() {
           </button>
           <div className="faint" style={{ fontSize: 12, textAlign: "center" }}>
             <Link href="/forgot" className="auth-link">שכחתם סיסמה?</Link>
+            {" · "}
+            <Link href="/signup" className="auth-link">אין חשבון? הרשמה</Link>
           </div>
         </div>
       </div>
