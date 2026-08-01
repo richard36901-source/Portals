@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import ThemeSeg from "@/components/ThemeSeg";
 import Logo from "@/components/Logo";
 import ChatRail from "@/components/portal/ChatRail";
@@ -19,6 +20,24 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     document.body.classList.remove("menu-open");
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  // שמירת גישה: ללא סשן → /login. גם מטפל בחזרת OAuth (detectSessionInUrl).
+  // ללא env (דמו) — לא מפנים, כדי לשמור על תצוגת הדמו.
+  useEffect(() => {
+    const sb = supabase();
+    if (!sb) return;
+    let active = true;
+    sb.auth.getSession().then(({ data }) => {
+      if (active && !data.session) router.replace("/login");
+    });
+    const { data: sub } = sb.auth.onAuthStateChange((_e, session) => {
+      if (!session) router.replace("/login");
+    });
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, [router]);
 
   return (
     <div className="view active" id="appview">
