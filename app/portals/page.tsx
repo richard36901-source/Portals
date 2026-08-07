@@ -9,7 +9,7 @@ import ObShell from "@/components/ObShell";
 import { supabase } from "@/lib/supabase";
 import { fetchMyProviders } from "@/lib/tenant";
 
-// דומיין הפלטפורמה (app.*): "הפורטלים שלי" — כל הדיירים שהמשתמש חבר בהם.
+// דומיין הפלטפורמה (portals.*): "הפורטלים שלי" — כל הדיירים שהמשתמש חבר בהם.
 export default function MyPortalsPage() {
   const router = useRouter();
   const [rows, setRows] = useState<{ role: string; providers: { id: string; slug: string; name: string } }[] | null>(null);
