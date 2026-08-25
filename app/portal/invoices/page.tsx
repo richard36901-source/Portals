@@ -75,8 +75,8 @@ export default function InvoicesPage() {
       <h3 className="sec">אפשרויות תשלום</h3>
       <div className="grid3">
         <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>תשלום מראש</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>שלמו על שלבים הבאים להתקדמות רציפה.</div><button className="btn sm ghost">בחירת סכום</button></div>
-        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>תחזוקה חודשית</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>הוראת קבע לתחזוקה ועדכונים.</div><button className="btn sm">הקמת תשלום</button></div>
-        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>בנק שעות</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>חבילת שעות לשינויים קטנים.</div><button className="btn sm ghost">רכישת שעות</button></div>
+        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>תחזוקה שוטפת</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>ריטיינר חודשי לתמיכה, עדכונים, תיקונים ופיתוח מתמשך. החל מ-₪400 לחודש, לא כולל מע״מ.</div><button className="btn sm">הקמת תשלום</button></div>
+        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>בנק שעות</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>קונים שעות מראש ומושכים לפי הצורך: 5 שעות ₪1,500 · 10 ב-₪2,900 · 20 ב-₪5,600 · 40 ב-₪10,800. ₪270–300 לשעה, לא כולל מע״מ, בתוקף ל-12 חודשים.</div><button className="btn sm ghost">רכישת שעות</button></div>
       </div>
 
       <h3 className="sec">היסטוריית תשלומים</h3>
@@ -117,8 +117,8 @@ function DemoInvoices() {
       <h3 className="sec">אפשרויות תשלום</h3>
       <div className="grid3">
         <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>תשלום מראש</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>שלמו על שלבים הבאים להתקדמות רציפה.</div><button className="btn sm ghost">בחירת סכום</button></div>
-        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>תחזוקה חודשית</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>הוראת קבע לתחזוקה ועדכונים.</div><button className="btn sm">הקמת תשלום</button></div>
-        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>בנק שעות</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>חבילת שעות לשינויים קטנים.</div><button className="btn sm ghost">רכישת שעות</button></div>
+        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>תחזוקה שוטפת</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>ריטיינר חודשי לתמיכה, עדכונים, תיקונים ופיתוח מתמשך. החל מ-₪400 לחודש, לא כולל מע״מ.</div><button className="btn sm">הקמת תשלום</button></div>
+        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 8 }}><div style={{ fontWeight: 700 }}>בנק שעות</div><div className="muted" style={{ fontSize: 13, flex: 1 }}>קונים שעות מראש ומושכים לפי הצורך: 5 שעות ₪1,500 · 10 ב-₪2,900 · 20 ב-₪5,600 · 40 ב-₪10,800. ₪270–300 לשעה, לא כולל מע״מ, בתוקף ל-12 חודשים.</div><button className="btn sm ghost">רכישת שעות</button></div>
       </div>
       <h3 className="sec">היסטוריית תשלומים</h3>
       <div className="card">

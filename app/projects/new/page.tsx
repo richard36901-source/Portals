@@ -31,15 +31,24 @@ function Steps({ current }: { current: Step }) {
 }
 
 const projectTypes = [
-  { label: "בניית פרויקט חדש", sub: "אתר, אפליקציה, מערכת — לפי אפיון", icon: <IconBuild size={22} /> },
-  { label: "בנק שעות", sub: "חבילת שעות לשינויים ותוספות קטנות", icon: <IconClockLg size={22} /> },
-  { label: "תחזוקה חודשית", sub: "עדכונים, גיבויים וזמינות שוטפת", icon: <IconRefresh size={22} /> },
+  { key: "build", label: "בניית פרויקט חדש", sub: "אתר, אפליקציה, מערכת — לפי אפיון", price: "החל מ-₪2,500 · הצעה ספציפית לפי היקף", icon: <IconBuild size={22} /> },
+  { key: "hours", label: "בנק שעות", sub: "קונים שעות מראש ומושכים לפי הצורך", price: "₪270–300 לשעה · ניכוי אוטומטי מהבנק", icon: <IconClockLg size={22} /> },
+  { key: "maintenance", label: "תחזוקה חודשית", sub: "ריטיינר לתמיכה, עדכונים, תיקונים ופיתוח מתמשך", price: "החל מ-₪400 לחודש · כולל תמיכה ושדרוגים", icon: <IconRefresh size={22} /> },
+];
+
+// חבילות בנק השעות — לפי המחירון באתר autoscalehq.io. כל המחירים אינם כוללים מע״מ.
+const HOUR_PACKS = [
+  { hours: 5, price: "₪1,500", perHour: "₪300 לשעה" },
+  { hours: 10, price: "₪2,900", perHour: "₪290 לשעה" },
+  { hours: 20, price: "₪5,600", perHour: "₪280 לשעה" },
+  { hours: 40, price: "₪10,800", perHour: "₪270 לשעה" },
 ];
 
 export default function NewProjectWizard() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("type");
   const [chosenType, setChosenType] = useState<string | null>(null);
+  const [chosenKey, setChosenKey] = useState<string | null>(null);
 
   const go = (s: Step) => {
     setStep(s);
@@ -54,11 +63,12 @@ export default function NewProjectWizard() {
           <div className="ob-h">מה תרצו לפתוח?</div>
           <div className="choose">
             {projectTypes.map((t) => (
-              <div key={t.label} className={`choice${chosenType === t.label ? " selected" : ""}`} onClick={() => setChosenType(t.label)}>
+              <div key={t.label} className={`choice${chosenType === t.label ? " selected" : ""}`} onClick={() => { setChosenType(t.label); setChosenKey(t.key); }}>
                 <div className="ci">{t.icon}</div>
                 <div>
                   <div className="ct">{t.label}</div>
                   <div className="cs">{t.sub}</div>
+                  <div className="cs" style={{ color: "var(--accent)", fontWeight: 600 }}>{t.price}</div>
                 </div>
                 <span className="cx faint">בחירה</span>
               </div>
@@ -90,18 +100,63 @@ export default function NewProjectWizard() {
         </div>
       )}
 
-      {step === "quote" && (
+      {step === "quote" && chosenKey === "hours" && (
         <div className="ostep active" data-step="quote">
           <Steps current="quote" />
-          <div className="ob-h">הצעת המחיר מוכנה</div>
-          <div className="ob-sub">בדקו את הפירוט ואשרו כדי להתחיל.</div>
+          <div className="ob-h">חבילות בנק שעות</div>
+          <div className="ob-sub">ככל שקונים יותר, המחיר לשעה יורד. בוחרים חבילה וממשיכים לתשלום.</div>
           <div className="card pad">
-            <div className="quote-line"><span>אפיון ועיצוב UX/UI</span><span className="tnum">₪6,500</span></div>
-            <div className="quote-line"><span>פיתוח האתר (5 עמודים)</span><span className="tnum">₪11,000</span></div>
-            <div className="quote-line"><span>התאמה לנייד + העלאה</span><span className="tnum">₪2,500</span></div>
-            <div className="quote-line" style={{ fontWeight: 750, fontSize: 16 }}><span>סה״כ</span><span className="tnum">₪20,000</span></div>
+            {HOUR_PACKS.map((h) => (
+              <div className="quote-line" key={h.hours}>
+                <span>{h.hours} שעות <span className="faint" style={{ fontSize: 12.5 }}>· {h.perHour}</span></span>
+                <span className="tnum">{h.price}</span>
+              </div>
+            ))}
           </div>
-          <div className="note"><IconInfo /><div>ההצעה כוללת <b>2 סבבי תיקונים</b>. סבב נוסף בתשלום לפי הצורך.</div></div>
+          <div className="note"><IconInfo /><div>
+            כל המחירים <b>אינם כוללים מע״מ</b>. השעות תקפות ל-<b>12 חודשים</b> מיום הרכישה, ומנוכות לפי זמן עבודה בפועל בעיגול ל-15 דקות הקרובות. דיווח שימוש נשלח מדי חודש.
+          </div></div>
+          <div className="btnrow">
+            <button className="btn ghost" onClick={() => go("describe")}>יש לי שאלה</button>
+            <button className="btn" onClick={() => go("pay")}>המשך לתשלום</button>
+          </div>
+        </div>
+      )}
+
+      {step === "quote" && chosenKey === "maintenance" && (
+        <div className="ostep active" data-step="quote">
+          <Steps current="quote" />
+          <div className="ob-h">תחזוקה שוטפת</div>
+          <div className="ob-sub">ריטיינר חודשי שמחזיק את המערכות שלכם פעילות ומעודכנות.</div>
+          <div className="card pad">
+            <div className="quote-line"><span>ריטיינר חודשי</span><span className="tnum">החל מ-₪400 לחודש</span></div>
+            <div className="quote-line"><span>תמיכה ותיעדוף פניות דחופות</span><span className="faint">כלול</span></div>
+            <div className="quote-line"><span>עדכונים, תיקונים ופיתוח מתמשך</span><span className="faint">כלול</span></div>
+            <div className="quote-line"><span>ניטור המערכות</span><span className="faint">כלול</span></div>
+          </div>
+          <div className="note"><IconInfo /><div>
+            המחיר הסופי נקבע לפי היקף המערכות והתמיכה הנדרשת, ואינו כולל מע״מ. נשלח הצעה מותאמת אחרי שנקרא את הבקשה.
+          </div></div>
+          <div className="btnrow">
+            <button className="btn ghost" onClick={() => go("describe")}>יש לי שאלה</button>
+            <button className="btn" onClick={() => go("pay")}>המשך להקמת התשלום</button>
+          </div>
+        </div>
+      )}
+
+      {step === "quote" && chosenKey !== "hours" && chosenKey !== "maintenance" && (
+        <div className="ostep active" data-step="quote">
+          <Steps current="quote" />
+          <div className="ob-h">הבקשה התקבלה</div>
+          <div className="ob-sub">נכין הצעת מחיר ספציפית לפי האפיון שלכם.</div>
+          <div className="card pad">
+            <div className="quote-line"><span>פרויקט חד-פעמי</span><span className="tnum">החל מ-₪2,500</span></div>
+            <div className="quote-line"><span>היקף ולוח זמנים</span><span className="faint">נסגרים מראש</span></div>
+            <div className="quote-line"><span>מדריכי וידאו והדרכה</span><span className="faint">לפי הצורך</span></div>
+          </div>
+          <div className="note"><IconInfo /><div>
+            ההצעה כוללת <b>2 סבבי תיקונים</b>; סבב נוסף בתשלום לפי הצורך. המחיר נקבע לפי היקף הפרויקט ואינו כולל מע״מ, ויישלח אליכם לאישור לפני שמתחילים.
+          </div></div>
           <div className="btnrow">
             <button className="btn ghost" onClick={() => go("describe")}>יש לי שאלה</button>
             <button className="btn" onClick={() => go("pay")}>אישור ההצעה</button>
@@ -112,8 +167,14 @@ export default function NewProjectWizard() {
       {step === "pay" && (
         <div className="ostep active" data-step="pay">
           <Steps current="pay" />
-          <div className="ob-h">תשלום מקדמה להתחלה</div>
-          <div className="ob-sub">מקדמה של 50% (₪10,000) פותחת את הפרויקט.</div>
+          <div className="ob-h">{chosenKey === "maintenance" ? "הקמת התשלום החודשי" : "תשלום להתחלה"}</div>
+          <div className="ob-sub">
+            {chosenKey === "hours"
+              ? "התשלום מפעיל את בנק השעות מיד עם האישור."
+              : chosenKey === "maintenance"
+              ? "הוראת קבע חודשית שניתן לעצור בכל שלב."
+              : "מקדמה פותחת את הפרויקט; היתרה נפרסת לפי אבני הדרך שבהצעה."}
+          </div>
           <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div className="field" style={{ margin: 0 }}>
               <label className="fl">מספר כרטיס</label>
@@ -126,7 +187,7 @@ export default function NewProjectWizard() {
           </div>
           <div className="btnrow">
             <button className="btn ghost" onClick={() => go("quote")}>חזרה</button>
-            <button className="btn" onClick={() => go("status")}>אישור ותשלום ₪10,000</button>
+            <button className="btn" onClick={() => go("status")}>אישור ותשלום</button>
           </div>
         </div>
       )}
