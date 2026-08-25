@@ -7,13 +7,13 @@ import LogoMark from "@/components/LogoMark";
 import { IconBuild, IconClockLg, IconRefresh, IconInfo, IconUpload } from "@/components/icons";
 import { PRODUCTS, GROUPS, HOUR_PACKS, VAT_NOTE, HOURS_BANK_URL, whatsappLink, type Product } from "@/lib/products";
 
-type Step = "type" | "describe" | "summary" | "status";
+type Step = "type" | "summary" | "status";
 
 function Steps({ current }: { current: Step }) {
   const order: { key: Step; label: string; n: number }[] = [
     { key: "type", label: "בחירה", n: 1 },
-    { key: "describe", label: "פרטים", n: 2 },
-    { key: "summary", label: "שליחה", n: 3 },
+    { key: "summary", label: "פרטים", n: 2 },
+    { key: "status", label: "שליחה", n: 3 },
   ];
   const idx = order.findIndex((s) => s.key === current);
   return (
@@ -63,7 +63,7 @@ export default function NewProjectWizard() {
                   <div
                     key={p.key}
                     className={`choice${chosen?.key === p.key ? " selected" : ""}`}
-                    onClick={() => setChosen(p)}
+                    onClick={() => { setChosen(p); go("summary"); }}
                   >
                     <div className="ci">{icon(p.key)}</div>
                     <div style={{ minWidth: 0 }}>
@@ -85,26 +85,6 @@ export default function NewProjectWizard() {
           <div className="note"><IconInfo /><div>{VAT_NOTE}</div></div>
           <div className="btnrow">
             <button className="btn ghost" onClick={() => router.push("/projects")}>חזרה</button>
-            <button className="btn" disabled={!chosen} style={{ opacity: chosen ? 1 : 0.5 }} onClick={() => go("describe")}>המשך</button>
-          </div>
-        </div>
-      )}
-
-      {step === "describe" && chosen && (
-        <div className="ostep active" data-step="describe">
-          <Steps current="describe" />
-          <div className="ob-h">ספרו לנו מה צריך</div>
-          <div className="ob-sub">{chosen.name} — כתבו, העלו קובץ, או שניהם.</div>
-          <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <div className="field" style={{ margin: 0 }}>
-              <label className="fl">תיאור הבקשה</label>
-              <textarea className="input" rows={4} placeholder="לדוגמה: אתר תדמית עם 5 עמודים, טופס יצירת קשר, בעברית ואנגלית..." />
-            </div>
-            <button className="btn ghost sm" style={{ alignSelf: "flex-start" }}><IconUpload /> העלאת מסמך אפיון (PDF)</button>
-          </div>
-          <div className="btnrow">
-            <button className="btn ghost" onClick={() => go("type")}>חזרה</button>
-            <button className="btn" onClick={() => go("summary")}>המשך</button>
           </div>
         </div>
       )}
@@ -128,6 +108,16 @@ export default function NewProjectWizard() {
             )}
           </div>
 
+          {!chosen.buyable && (
+            <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div className="field" style={{ margin: 0 }}>
+                <label className="fl">ספרו לנו מה צריך</label>
+                <textarea className="input" rows={4} placeholder="לדוגמה: אתר תדמית עם 5 עמודים, טופס יצירת קשר, בעברית ואנגלית..." />
+              </div>
+              <button className="btn ghost sm" style={{ alignSelf: "flex-start" }}><IconUpload /> העלאת מסמך אפיון (PDF)</button>
+            </div>
+          )}
+
           {chosen.buyable ? (
             <>
               <h3 className="sec">חבילות בנק שעות</h3>
@@ -149,7 +139,7 @@ export default function NewProjectWizard() {
                 <a className="btn ghost" href={whatsappLink(chosen.name)} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center" }}>
                   שיחה בוואטסאפ עם דונה
                 </a>
-                <button className="btn ghost" onClick={() => go("describe")}>חזרה</button>
+                <button className="btn ghost" onClick={() => go("type")}>חזרה</button>
               </div>
             </>
           ) : (
@@ -162,7 +152,7 @@ export default function NewProjectWizard() {
                 <a className="btn ghost" href={whatsappLink(chosen.name)} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center" }}>
                   שאלה בוואטסאפ
                 </a>
-                <button className="btn ghost" onClick={() => go("describe")}>חזרה</button>
+                <button className="btn ghost" onClick={() => go("type")}>חזרה</button>
               </div>
             </>
           )}
