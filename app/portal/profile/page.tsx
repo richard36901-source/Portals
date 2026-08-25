@@ -64,7 +64,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="kv">
-          <div><div style={{ fontWeight: 600 }}>ערכת נושא</div><div className="faint" style={{ fontSize: 12 }}>נשלטת מלמעלה — בהיר / כהה / מערכת</div></div>
+          <div><div style={{ fontWeight: 600 }}>ערכת נושא</div><div className="faint" style={{ fontSize: 12 }}>נשלטת מלמעלה — בהיר או כהה</div></div>
           <ThemeSeg plain />
         </div>
       </div>

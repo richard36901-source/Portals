@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-type Mode = "light" | "dark" | "system";
+type Mode = "light" | "dark";
 
 function applyTheme(mode: Mode) {
-  const root = document.documentElement;
-  if (mode === "system") root.removeAttribute("data-theme");
-  else root.setAttribute("data-theme", mode);
+  document.documentElement.setAttribute("data-theme", mode);
   try {
     localStorage.setItem("portal-theme", mode);
   } catch {}
@@ -15,12 +13,15 @@ function applyTheme(mode: Mode) {
 }
 
 function useThemeMode(): [Mode, (m: Mode) => void] {
-  const [mode, setMode] = useState<Mode>("system");
+  const [mode, setMode] = useState<Mode>("light");
   useEffect(() => {
+    // ללא בחירה שמורה — נגזר פעם אחת מהמכשיר, ומכאן ואילך הבחירה מפורשת
+    let saved: string | null = null;
     try {
-      const saved = localStorage.getItem("portal-theme");
-      if (saved === "light" || saved === "dark" || saved === "system") setMode(saved);
+      saved = localStorage.getItem("portal-theme");
     } catch {}
+    if (saved === "light" || saved === "dark") setMode(saved);
+    else setMode(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     const onChange = (e: Event) => setMode((e as CustomEvent<Mode>).detail);
     window.addEventListener("portal-theme", onChange);
     return () => window.removeEventListener("portal-theme", onChange);
@@ -34,14 +35,9 @@ const sunIcon = (
 const moonIcon = (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" /></svg>
 );
-const systemIcon = (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.7" /><path d="M8 20h8M12 16v4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" /></svg>
-);
-
 const modes: { mode: Mode; label: string; icon: React.ReactNode; title: string }[] = [
   { mode: "light", label: "בהיר", icon: sunIcon, title: "בהיר" },
   { mode: "dark", label: "כהה", icon: moonIcon, title: "כהה" },
-  { mode: "system", label: "מערכת", icon: systemIcon, title: "מערכת" },
 ];
 
 export default function ThemeSeg({ icons = false, plain = false }: { icons?: boolean; plain?: boolean }) {

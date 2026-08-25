@@ -11,7 +11,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const themeInit = `try{var t=localStorage.getItem('portal-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}`;
+const themeInit = `try{var t=localStorage.getItem('portal-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
