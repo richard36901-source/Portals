@@ -16,6 +16,7 @@ export default function SignupPage() {
   const [pw, setPw] = useState("");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [confirmSent, setConfirmSent] = useState(false);
 
   const submit = async () => {
     if (pw.length < 8) return setErr("הסיסמה צריכה להיות באורך 8 תווים לפחות.");
@@ -26,7 +27,14 @@ export default function SignupPage() {
       email, password: pw,
       options: { data: { full_name: name }, emailRedirectTo: `${location.origin}/welcome` },
     });
-    if (error) { setBusy(false); setErr(error.message.includes("registered") ? "האימייל כבר רשום — נסו להתחבר." : "ההרשמה נכשלה, בדקו את הפרטים."); return; }
+    if (error) {
+      setBusy(false);
+      setErr(/registered|exists/i.test(error.message) ? "האימייל כבר רשום — נסו להתחבר או לאפס סיסמה." : "ההרשמה נכשלה: " + error.message);
+      return;
+    }
+    // כשנדרש אישור אימייל, Supabase לא מחזיר סשן. אסור להמשיך כאילו נכנסנו —
+    // זה מה שגרם למשתמש להיזרק החוצה ברגע הכניסה לפרויקט.
+    if (!data.session) { setBusy(false); setConfirmSent(true); return; }
     // פרופיל + שיוך לדייר הנוכחי (אם ה-RLS מאפשר; אחרת ההזמנה תשויך בצד השרת)
     const user = data.user;
     if (user) {
@@ -52,6 +60,16 @@ export default function SignupPage() {
           <h1>יצירת חשבון</h1>
           <p>AutoScale · הצטרפות לפורטל הלקוחות</p>
         </div>
+        {confirmSent ? (
+        <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 12, textAlign: "center", alignItems: "center" }}>
+          <div className="av" style={{ width: 54, height: 54, fontSize: 24 }}>✉️</div>
+          <div style={{ fontWeight: 700, fontSize: 16 }}>נשאר לאמת את האימייל</div>
+          <div className="muted" style={{ fontSize: 13.5 }}>
+            שלחנו קישור אישור אל <b>{email}</b>. צריך ללחוץ עליו כדי להפעיל את החשבון — עד אז ההתחברות תיחסם. בדקו גם בתיקיית הספאם.
+          </div>
+          <Link href="/login" className="btn sm" style={{ display: "inline-flex", alignItems: "center" }}>אישרתי — למסך ההתחברות</Link>
+        </div>
+        ) : (
         <div className="card pad" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <div className="field" style={{ margin: 0 }}>
             <label className="fl">שם מלא</label>
@@ -71,6 +89,7 @@ export default function SignupPage() {
             כבר יש חשבון? <Link href="/login" className="auth-link">התחברות</Link>
           </div>
         </div>
+        )}
       </div>
     </div>
   );

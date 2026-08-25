@@ -30,8 +30,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     sb.auth.getSession().then(({ data }) => {
       if (active && !data.session) router.replace("/login");
     });
-    const { data: sub } = sb.auth.onAuthStateChange((_e, session) => {
-      if (!session) router.replace("/login");
+    // מפנים רק ביציאה מפורשת — לא על אירועי אתחול חולפים שבהם עוד אין סשן
+    const { data: sub } = sb.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") router.replace("/login");
     });
     return () => {
       active = false;

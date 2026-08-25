@@ -4,6 +4,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 // מסך מעבר אחרי התחברות: הלוגו גדל, זוהר בצבעי המותג, ונעלם אל תוך הפורטל.
 export default function WelcomeSplash() {
@@ -11,8 +12,14 @@ export default function WelcomeSplash() {
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = setTimeout(() => router.replace("/projects"), reduced ? 400 : 2300);
-    return () => clearTimeout(t);
+    // מגיעים לכאן גם מקישור אימות אימייל ומחזרת Google — הטוקן יושב ב-hash.
+    // ממתינים שהקליינט יקלוט אותו לפני שממשיכים, אחרת הסשן אובד בניווט.
+    const sb = supabase();
+    const session = sb ? sb.auth.getSession().then(() => undefined) : Promise.resolve(undefined);
+    const timer = new Promise<void>((r) => setTimeout(r, reduced ? 400 : 2300));
+    let cancelled = false;
+    Promise.all([session, timer]).then(() => { if (!cancelled) router.replace("/projects"); });
+    return () => { cancelled = true; };
   }, [router]);
 
   return (
