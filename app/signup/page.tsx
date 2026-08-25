@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ThemeSeg from "@/components/ThemeSeg";
 import Logo from "@/components/Logo";
-import { supabase } from "@/lib/supabase";
+import { supabase, emailRedirect } from "@/lib/supabase";
 import { fetchProvider, resolveTenant } from "@/lib/tenant";
 
 // הרשמה: אימייל+סיסמה+שם ← יצירת משתמש, פרופיל, ושיוך לדייר של הדומיין.
@@ -25,7 +25,7 @@ export default function SignupPage() {
     setBusy(true); setErr(null);
     const { data, error } = await sb.auth.signUp({
       email, password: pw,
-      options: { data: { full_name: name }, emailRedirectTo: `${location.origin}/welcome` },
+      options: { data: { full_name: name }, emailRedirectTo: emailRedirect("/welcome") },
     });
     if (error) {
       setBusy(false);

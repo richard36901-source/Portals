@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import ThemeSeg from "@/components/ThemeSeg";
 import Logo from "@/components/Logo";
-import { supabase } from "@/lib/supabase";
+import { supabase, emailRedirect } from "@/lib/supabase";
 
 // שחזור סיסמה: מזינים אימייל, נשלח קישור איפוס.
 // שליחת האימייל בפועל מתחברת ל-Supabase Auth בשלב חיבור הנתונים.
@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
             </div>
             <button className="btn block" onClick={async () => {
               const sb = supabase();
-              if (sb && email) await sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/reset` });
+              if (sb && email) await sb.auth.resetPasswordForEmail(email, { redirectTo: emailRedirect("/reset") });
               setSent(true);
             }}>שליחת קישור איפוס</button>
             <div className="faint" style={{ fontSize: 12, textAlign: "center" }}>

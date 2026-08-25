@@ -22,3 +22,12 @@ export function supabase(): SupabaseClient | null {
   }
   return client;
 }
+
+// כתובת בסיס לקישורים שמגיעים במייל (אישור הרשמה, איפוס סיסמה).
+// חייבת להיות כתובת ציבורית — קישור ל-localhost נשבר כשפותחים את המייל בטלפון.
+// OAuth לעומת זאת נשאר על מקור הדפדפן הנוכחי, כי הוא חוזר לאותו מכשיר.
+export function emailRedirect(path: string): string {
+  const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  if (base) return base + path;
+  return (typeof window !== "undefined" ? window.location.origin : "") + path;
+}

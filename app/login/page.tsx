@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ThemeSeg from "@/components/ThemeSeg";
 import Logo from "@/components/Logo";
-import { supabase } from "@/lib/supabase";
+import { supabase, emailRedirect } from "@/lib/supabase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function LoginPage() {
     const sb = supabase();
     if (!sb || !email) return;
     setBusy(true);
-    await sb.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${location.origin}/welcome` } });
+    await sb.auth.resend({ type: "signup", email, options: { emailRedirectTo: emailRedirect("/welcome") } });
     setBusy(false);
     setNeedConfirm(false);
     setErr("שלחנו מייל אישור חדש. בדקו גם בתיקיית הספאם.");
